@@ -16,12 +16,26 @@
 # 
 # Author:: Antonio Hernández <ahernandez@emergya.com>
 
-class GecosUpdater::Select < GecosUpdater::Command
+# Base class for concrete commands implementations.
+# Each command supports two interfaces, one for
+# command line and one for Ncurses.
+# You may need to overwrite the class methods for convenience.
+# Each command may need to contemplate how the result is
+# going to be output, options could be:
+#
+#   STDOUT in plain/formated text.
+#   STDOUT in structured format like JSON.
+#   Object or hash returned by the run() method.
 
-  def run(subcommand, options)
-    puts "running Select command:"
-    p subcommand
-    p options
+class GecosUpdater::Provider
+
+  def run(action, *options)
+    @options = options
+    begin
+      method_name = "action_#{action}"
+      self.method(method_name).call()
+    rescue
+    end
   end
 
 end

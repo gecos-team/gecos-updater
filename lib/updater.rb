@@ -1,3 +1,20 @@
+# This file is part of Guadalinex GECOS
+#
+# This software is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this package; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+# 
+# Author:: Antonio Hernández <ahernandez@emergya.com>
 
 require "optparse"
 
@@ -9,7 +26,8 @@ class GecosUpdater
       :help => false,
       :interactive => false,
       :confpath => "/etc/gecos-updater.conf",
-      :repo => ""
+      :repo => "",
+      :format => "plain"
     }
   end
 
@@ -36,11 +54,15 @@ class GecosUpdater
         options[:repo] = r
       end
  
-      opts.on("-f", "--foo ARG", "URL of the remote repository.") do |f|
-        options[:foo] = f
+      opts.on("-f", "--output-format FORMAT", "The output style, plain text, JSON.") do |f|
+        options[:format] = f
       end
   
     end.parse!
+
+    # Read the configuratino file and merge the default options
+    # and the ones specified by command line.
+    options = self.read_conf(options)
 
     command, subcommand = commands[0], commands[1]
     command = 'help' if options[:help] == true
@@ -57,6 +79,13 @@ class GecosUpdater
       require "./lib/commands/#{command}"
       instance = GecosUpdater::const_get(command.capitalize).new
     end
+  end
+
+  def self.read_conf(options)
+    confpath = options[:confpath]
+    # TODO: Check the file exits, parse it, and
+    # merge the values with the option hash.
+    return options
   end
 
 end
