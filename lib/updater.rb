@@ -27,7 +27,10 @@ class GecosUpdater
       :interactive => false,
       :confpath => "/etc/gecos-updater.conf",
       :repo => "",
-      :format => "plain"
+      :format => "plain",
+      :list_all => false,
+      :list_upd => true,
+      :list_sel => false
     }
   end
 
@@ -54,8 +57,22 @@ class GecosUpdater
         options[:repo] = r
       end
  
-      opts.on("-f", "--output-format FORMAT", "The output style, plain text, JSON.") do |f|
-        options[:format] = f
+      opts.on("", "--all", "List all the avaiable packages.") do |l|
+        options[:list_all] = l
+        options[:list_upd] = false
+        options[:list_sel] = false
+      end
+ 
+      opts.on("", "--updatable", "List all the updatable packages.") do |l|
+        options[:list_all] = false
+        options[:list_upd] = l
+        options[:list_sel] = false
+      end
+ 
+      opts.on("", "--selected", "List all packages selected for update.") do |l|
+        options[:list_all] = false
+        options[:list_upd] = false
+        options[:list_sel] = l
       end
   
     end.parse!

@@ -36,6 +36,13 @@ class GecosUpdater::Command
   #   subcommand: The task this class may perform.
   #   options: A hash containing specific modifiers.
   def run(subcommand, options)
+    @options = options
+    begin
+      method_name = "action_#{subcommand}"
+      self.method(method_name).call()
+    rescue Exception => e
+      p e
+    end
   end
 
   def output_plain(format, text)

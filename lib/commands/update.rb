@@ -21,8 +21,12 @@ require "lib/providers/repo"
 class GecosUpdater::Update < GecosUpdater::Command
 
   def run(subcommand, options)
-    output_plain(options[:format], "Running Update command:")
-    repopath = options[:repo]
+    super "update", options
+  end
+
+  def action_update
+    output_plain(@options[:format], "Running Update command:")
+    repopath = @options[:repo]
     repo = GecosUpdater::Repo.new
     ret = repo.run("checkout", repopath)
   end

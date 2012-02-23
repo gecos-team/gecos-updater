@@ -34,7 +34,8 @@ class GecosUpdater::Provider
     begin
       method_name = "action_#{action}"
       self.method(method_name).call()
-    rescue
+    rescue Exception => e
+      p e
     end
   end
 

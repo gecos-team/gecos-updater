@@ -19,16 +19,16 @@
 class GecosUpdater::Apply < GecosUpdater::Command
 
   def run(subcommand, options)
-    puts "running Apply command:"
-    p subcommand
-    p options
+    @selected = read_selected_packages
+    super "apply", options
   end
 
-  def curses_options
-    options = [
-      {:id => "1", :command => "update", :text => "alkjsdhf"},
-      {:id => "2", :command => "update", :text => "hjas  sdahj"}
-    ]
+  def action_apply
+    puts "Update the server with the selected packages\n"
+  end
+
+  def read_selected_packages
+    return {}
   end
 
   def curses_show_menu
